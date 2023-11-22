@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+
+{% block head_css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/cadastro.css') }}">
+{% endblock %}
+
+{% block body %}
+    <form method="POST" class="custom-form">
+        {{ form.csrf_token }}
+
+        <div class="form-group">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-input") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-input") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-input") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.checkPassword.label(class="form-label") }}
+            {{ form.checkPassword(class="form-input") }}
+        </div>
+
+        {{ form.btn(class="submit-button") }}
+    </form>
+{% endblock %}

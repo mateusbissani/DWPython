@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+<nav class="navbar">
+    <div class="navbar-logo">
+        <a href="{{ url_for('homepage') }}">
+<!--            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">-->
+            <span class="material-symbols-outlined">eco</span>
+        </a>
+    </div>
+    <ul class="navbar-links">
+        <li><a href="{{ url_for('homepage') }}"><span class="material-symbols-outlined">flood</span></a></li>
+        {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('profile', user_id=current_user.id) }}">Meu Perfil</a></li>
+        {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% endif %}
+    </ul>
+</nav>

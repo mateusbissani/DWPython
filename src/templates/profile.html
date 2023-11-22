@@ -1,0 +1,91 @@
+{% extends "main.html" %}
+
+{% block titulo %} Perfil do {{ user }} {% endblock %}
+
+{% block head_css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/perfil.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,700,1,-25" />
+{% endblock %}
+
+{% block body %}
+
+{% include 'navbar.html' %}
+
+<div class="container">
+    <div class="profile">
+        <h1 class="username">{{ user.username }}</h1>
+        <!-- <a href="{{url_for('homepage')}}">HOME</a> -->
+
+        {% if form %}
+            <!-- <h2> MEU PERFIL </h2> -->
+
+            <form class="form-post" method="POST" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+
+                <div class="post-intro">
+                    {{ form.text.label() }}
+                    {{ form.text() }}
+                </div>
+
+                <div class="post-intro">
+                    {{ form.photo.label() }}
+                    {{ form.photo() }}
+                </div>
+
+                <div class="post-intro">
+                    {{ form.btn() }}
+                </div>
+
+            </form>
+        {% endif %}
+
+        <p style="text-align: center">Contagem de Posts: {{ post_count }}</p>
+
+<!--        <form class="logout" method="POST" action="{{ url_for('logout') }}">-->
+<!--            {{ form.csrf_token }}-->
+<!--            <button type="submit" class="btn btn-danger">Logout</button>-->
+<!--        </form>-->
+        {% if current_user.id == user.id %}
+            <form class="logout" method="POST" action="{{ url_for('logout') }}">
+                {{ form.csrf_token }}
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        {% endif %}
+
+    </div>
+
+    <div class="posts-container">
+        {% for post in user.posts %}
+            <div class="post">
+                <div class="post-header">
+                    <p class="username">{{ post.user.username }}</p>
+                </div>
+                <img class="img-thumbnail rounded" src="{{ url_for('static', filename='photos_posts/{}'.format(post.post_img)) }}">
+                <p>{{ post.post_text }}</p>
+<!--                <p>Data de Publicação: {{ format_post_date(post.creation_date) }}</p>-->
+                <div class="post-footer">
+                    <form method="POST" action="{{ url_for('like', post_id=post.id) }}">
+                        {{ form.csrf_token }}
+                        <button type="submit" class="heart-button {% if post.user_likes(current_user) %}active{% endif %}">
+                            {% if post.user_likes(current_user) %}
+                            <span class="material-symbols-rounded filled">favorite</span>
+                            {% else %}
+                            <span class="material-symbols-rounded">favorite</span>
+                            {% endif %}
+                        </button>
+                    </form>
+                    <p class="post-date">{{ format_post_date(post.creation_date) }}</p>
+                    {% if current_user.id == user.id %}
+                        <form method="POST" action="{{ url_for('delete_post', post_id=post.id) }}">
+                            {{ form.csrf_token }}
+                            <button type="submit" class="btn btn-danger btn-excluir">Excluir post</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

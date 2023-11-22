@@ -1,0 +1,43 @@
+{% extends "main.html" %}
+
+{% block titulo %} HomePage {% endblock %}
+
+{% block head_css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,700,1,-25" />
+{% endblock %}
+
+{% block body %}
+
+    {% include 'navbar.html' %}
+
+<!--    <h1> Bem-vindo à Página Inicial </h1>-->
+
+    {% for post in posts %}
+    <a href="{{ url_for('profile', user_id=post.user.id) }}" class="post-link">
+    <div class="post">
+        <div class="post-header">
+            <p class="username">{{ post.user.username }}</p>
+        </div>
+        <img class="img-thumbnail rounded" src="{{ url_for('static', filename='photos_posts/{}'.format(post.post_img)) }}">
+        <p>{{ post.post_text }}</p>
+        <div class="post-footer">
+            <form method="POST"  action="{{ url_for('like', post_id=post.id) }}">
+                {{ form.csrf_token }}
+                <button type="submit" class="heart-button {% if post.user_likes(current_user) %}active{% endif %}">
+                {% if post.user_likes(current_user) %}
+                    <span class="material-symbols-rounded filled">favorite</span>
+                {% else %}
+                    <span class="material-symbols-rounded">favorite</span>
+                {% endif %}
+                </button>
+            </form>
+            <p class="post-date">{{ format_post_date(post.creation_date) }}</p>
+        </div>
+    </div>
+    </a>
+    {% endfor %}
+
+<!--    <a href="{{ url_for('createAccount') }}">Cadastrar-se</a>-->
+{% endblock %}
