@@ -13,7 +13,7 @@ body {
 
 .navbar-logo a {
     text-decoration: none;
-    color: #000000;
+    color: #ffffff;
     font-size: 24px;
     font-weight: bold;
     margin-left: 20px;
@@ -26,7 +26,7 @@ body {
 }
 
 .navbar-links li {
-    margin-right: 40px;
+    margin-right: 400px;
 }
 
 .navbar-links a {

@@ -1,4 +1,4 @@
-# Aqui vai a estrutura do nosso banco de dados (classes e tals)
+
 from src import database
 from datetime import datetime
 from src import login_manager
@@ -22,16 +22,15 @@ class Posts(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     post_text = database.Column(database.String, default='')
     post_img = database.Column(database.String, default='default.png')
-    creation_date = database.Column(database.DateTime, nullable=False, default=datetime.utcnow()) # Data de criação do post.
+    creation_date = database.Column(database.DateTime, nullable=False, default=datetime.utcnow())
     user_id = database.Column(database.Integer, database.ForeignKey('user.id'), nullable=False)
 
     def user_likes(self, user):
-        # Verifica se o usuário deu like neste post.
         like = Like.query.filter_by(user_id=user.id, post_id=self.id).first()
-        return like is not None # Retorna true se um Like for encontrado ou false se nenhum Like for encontrado.
+        return like is not None
 
-class Like(database.Model): # Classe de Like do banco de dados
-    __table_args__ = {'extend_existing': True} # Config para atualizar a tabela.
-    id = database.Column(database.Integer, primary_key=True) # Id para identificar o Like
-    user_id = database.Column(database.Integer, database.ForeignKey('user.id'), nullable=False) # A id do usuario que deu Like
-    post_id = database.Column(database.Integer, database.ForeignKey('posts.id'), nullable=False) # O id do post que foi dado Like
+class Like(database.Model):
+    __table_args__ = {'extend_existing': True}
+    id = database.Column(database.Integer, primary_key=True)
+    user_id = database.Column(database.Integer, database.ForeignKey('user.id'), nullable=False)
+    post_id = database.Column(database.Integer, database.ForeignKey('posts.id'), nullable=False)
